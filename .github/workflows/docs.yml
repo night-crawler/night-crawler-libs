@@ -1,0 +1,23 @@
+name: Docs
+on:
+  push:
+    branches: [ main ]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Build documentation
+        run: ./gradlew clean dokkaHtmlMultiModule
+      - name: Publish documentation
+        uses: JamesIves/github-pages-deploy-action@4.1.1
+        with:
+          token: ${{ secrets.GH_ACCOUNT_ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build/docs
