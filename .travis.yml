@@ -5,7 +5,7 @@ jdk:
 
 script:
   - ./gradlew clean check --info --stacktrace --console=plain --max-workers=1 --no-daemon --build-cache -Dkotlin.colors.enabled=false
-  - ./gradlew codeCoverageReport
+  - ./gradlew jacocoRootReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
