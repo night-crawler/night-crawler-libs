@@ -60,7 +60,10 @@ class HashExecutorService(
 
     @Throws(InterruptedException::class)
     override fun awaitTermination(timeout: Long, unit: TimeUnit): Boolean {
-        return doSafe { awaitTermination(timeout, unit) }.all { it }
+        return Executors.newFixedThreadPool(pool.size)
+            .invokeAll(pool.map { Callable { it.awaitTermination(timeout, unit) } })
+            .map { it.get() }
+            .all { it }
     }
 
     override fun <T : Any?> submit(task: Callable<T>): Future<T> {
